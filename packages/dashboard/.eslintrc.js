@@ -13,6 +13,7 @@ module.exports = {
     'no-restricted-exports': 0,
     'max-len': [1, { code: 200 }],
     'import/extensions': ['error', 'ignorePackages', { js: 'never', jsx: 'never', ts: 'never', tsx: 'never' }],
+    'react/display-name': 0,
   },
   globals: {
     JSX: true,

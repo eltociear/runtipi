@@ -1,8 +1,9 @@
 import { Button } from '@chakra-ui/react';
 import React from 'react';
-import { Field, Form } from 'react-final-form';
+import { useForm } from 'react-hook-form';
+// import { Field, Form } from 'react-final-form';
 import validator from 'validator';
-import FormInput from '../../../components/Form/FormInput';
+import FormInput from '../../../components/Form/FormInputV2';
 
 type FormValues = { email: string; password: string };
 
@@ -11,46 +12,39 @@ interface IProps {
   loading: boolean;
 }
 
-const LoginForm: React.FC<IProps> = ({ onSubmit, loading }) => {
-  const validateFields = (values: FormValues) => {
-    const errors: Record<string, string> = {};
+const LoginForm: React.FC<IProps> = ({ loading }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setError,
+  } = useForm<FormValues>();
 
+  const validateFields = (values: FormValues) => {
     if (!validator.isEmail(values.email || '')) {
-      errors.email = 'Invalid email';
+      setError('email', { message: 'Invalid email' });
     }
 
     if (!values.password) {
-      errors.password = 'Required';
+      setError('password', { message: 'Password is required' });
     }
-
-    return errors;
   };
 
+  const onSubmit = (data) => console.log(data);
+
+  console.log(errors);
+
   return (
-    <Form<FormValues>
-      onSubmit={onSubmit}
-      validateOnBlur={true}
-      validate={(values) => validateFields(values)}
-      render={({ handleSubmit, validating, submitting }) => (
-        <form className="flex flex-col" onSubmit={handleSubmit}>
-          <Field
-            name="email"
-            render={({ input, meta }) => (
-              <FormInput size="lg" className="mt-3 w-full" error={meta.error} isInvalid={meta.invalid && (meta.submitError || meta.submitFailed)} placeholder="Email" {...input} />
-            )}
-          />
-          <Field
-            name="password"
-            render={({ input, meta }) => (
-              <FormInput size="lg" className="mt-3 w-full" error={meta.error} isInvalid={meta.invalid && (meta.submitError || meta.submitFailed)} placeholder="Password" type="password" {...input} />
-            )}
-          />
-          <Button isLoading={validating || submitting || loading} className="mt-2" colorScheme="green" type="submit">
-            Login
-          </Button>
-        </form>
-      )}
-    />
+    <form className="flex flex-col" onSubmit={handleSubmit(validateFields)}>
+      <fieldset className="form-fieldset">
+        <FormInput {...register('email')} error={errors.email?.message} type="" className="mt-3" placeholder="Email" />
+        <FormInput {...register('password')} error={errors.password?.message} placeholder="Password" type="password" />
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
+      </fieldset>
+    </form>
   );
 };
 
