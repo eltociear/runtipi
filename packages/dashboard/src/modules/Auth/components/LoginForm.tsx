@@ -1,49 +1,39 @@
-import { Button } from '@chakra-ui/react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-// import { Field, Form } from 'react-final-form';
-import validator from 'validator';
+import z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import FormInput from '../../../components/Form/FormInputV2';
+import Button from '../../../components/Form/Button';
 
 type FormValues = { email: string; password: string };
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+});
 
 interface IProps {
   onSubmit: (values: FormValues) => void;
   loading: boolean;
 }
 
-const LoginForm: React.FC<IProps> = ({ loading }) => {
+const LoginForm: React.FC<IProps> = ({ loading, onSubmit }) => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    setError,
-  } = useForm<FormValues>();
-
-  const validateFields = (values: FormValues) => {
-    if (!validator.isEmail(values.email || '')) {
-      setError('email', { message: 'Invalid email' });
-    }
-
-    if (!values.password) {
-      setError('password', { message: 'Password is required' });
-    }
-  };
-
-  const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+  });
 
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit(validateFields)}>
-      <fieldset className="form-fieldset">
-        <FormInput {...register('email')} error={errors.email?.message} type="" className="mt-3" placeholder="Email" />
-        <FormInput {...register('password')} error={errors.password?.message} placeholder="Password" type="password" />
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-      </fieldset>
+    <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+      <h2 className="h2 text-center mb-1">Login to your account</h2>
+      <FormInput {...register('email')} label="Email address" error={errors.email?.message} disabled={loading} type="email" className="mt-3" placeholder="you@example.com" />
+      <FormInput {...register('password')} label="Password" error={errors.password?.message} disabled={loading} type="password" placeholder="Your password" />
+      <Button loading={loading} type="submit" className="btn btn-primary w-100">
+        Login
+      </Button>
     </form>
   );
 };

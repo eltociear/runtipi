@@ -9,13 +9,18 @@ interface IProps {
   className?: string;
   isInvalid?: boolean;
   type?: HTMLInputElement['type'];
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
-const FormInput = React.forwardRef<HTMLInputElement, IProps>(({ placeholder, error, type = 'text', label, className }, ref) => {
+const FormInput = React.forwardRef<HTMLInputElement, IProps>(({ onChange, onBlur, name, label, placeholder, error, type = 'text', className }, ref) => {
   return (
     <div className={clsx('mb-3', className)}>
       {label && <label className="form-label">{label}</label>}
-      <input type={type} ref={ref} className={clsx('form-control', { 'is-invalid is-invalid-lite': error })} placeholder={placeholder} />
+      <input name={name} onBlur={onBlur} onChange={onChange} type={type} ref={ref} className={clsx('form-control', { 'is-invalid is-invalid-lite': error })} placeholder={placeholder} />
+      {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 });

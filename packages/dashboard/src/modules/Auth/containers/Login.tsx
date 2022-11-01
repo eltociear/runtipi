@@ -1,7 +1,7 @@
 import { useApolloClient } from '@apollo/client';
-import { useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useLoginMutation } from '../../../generated/graphql';
+import { useToastStore } from '../../../state/toastStore';
 import AuthFormLayout from '../components/AuthFormLayout';
 import LoginForm from '../components/LoginForm';
 
@@ -11,12 +11,12 @@ const Login: React.FC = () => {
   const client = useApolloClient();
   const [login] = useLoginMutation({});
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  const { addToast } = useToastStore();
 
   const handleError = (error: unknown) => {
     localStorage.removeItem('token');
     if (error instanceof Error) {
-      toast({
+      addToast({
         title: 'Error',
         description: error.message,
         status: 'error',
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <AuthFormLayout title="Welcome back" description="Enter your credentials to login to your Tipi">
+    <AuthFormLayout>
       <LoginForm onSubmit={handleLogin} loading={loading} />
     </AuthFormLayout>
   );

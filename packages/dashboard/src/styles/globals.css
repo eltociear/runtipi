@@ -1,8 +1,8 @@
 /* @tailwind base; */
 /* @tailwind components; */
-@tailwind utilities;
+/* @tailwind utilities; */
 
-html,
+/* html,
 body {
   padding: 0;
   overflow-x: hidden;
@@ -45,4 +45,4 @@ a {
 .app-store-tile-logo {
   width: 80px;
   height: 80px;
-}
+} */

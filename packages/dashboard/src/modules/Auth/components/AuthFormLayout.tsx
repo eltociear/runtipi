@@ -1,17 +1,25 @@
-import { Container, Flex, SlideFade, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 import React from 'react';
 import { getUrl } from '../../../core/helpers/url-helpers';
 
 interface IProps {
-  title: string;
-  description: string;
   children: React.ReactNode;
 }
 
-const AuthFormLayout: React.FC<IProps> = ({ children, title, description }) => {
+const AuthFormLayout: React.FC<IProps> = ({ children }) => {
   return (
-    <Container maxW="1250px">
-      <Flex flex={1} height="100vh" overflowY="hidden">
+    <div className="page page-center">
+      <div className="container container-tight py-4">
+        <div className="text-center mb-4">
+          <a className="navbar-brand navbar-brand-autodark">
+            <Image alt="Tipi log" layout="intrinsic" src={getUrl('tipi.png')} height={50} width={50} />
+          </a>
+        </div>
+        <div className="card card-md">
+          <div className="card-body">{children}</div>
+        </div>
+      </div>
+      {/* <Flex flex={1} height="100vh" overflowY="hidden">
         <SlideFade in className="flex flex-1 flex-col justify-center items-center" offsetY="20px">
           <img className="self-center mb-5 logo" src={getUrl('tipi.png')} width={512} height={512} />
           <Text className="text-xl md:text-2xl lg:text-5xl font-bold" size="3xl">
@@ -22,8 +30,8 @@ const AuthFormLayout: React.FC<IProps> = ({ children, title, description }) => {
           </Text>
           {children}
         </SlideFade>
-      </Flex>
-    </Container>
+      </Flex> */}
+    </div>
   );
 };
 

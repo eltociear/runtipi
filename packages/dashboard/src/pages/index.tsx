@@ -5,7 +5,11 @@ import Dashboard from '../modules/Dashboard/containers/Dashboard';
 
 const Home: NextPage = () => {
   const { data, loading } = useSystemInfoQuery({ pollInterval: 10000 });
-  return <Layout loading={loading && !data}>{data?.systemInfo && <Dashboard data={data.systemInfo} />}</Layout>;
+  return (
+    <Layout title="Dashboard" loading={loading && !data}>
+      {data?.systemInfo && <Dashboard data={data.systemInfo} />}
+    </Layout>
+  );
 };
 
 export default Home;

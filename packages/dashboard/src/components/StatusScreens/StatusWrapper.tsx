@@ -1,4 +1,3 @@
-import { SlideFade } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { SystemStatus, useSystemStore } from '../../state/systemStore';
@@ -29,19 +28,11 @@ const StatusWrapper: React.FC<IProps> = ({ children }) => {
   }, [data?.status]);
 
   if (s === SystemStatus.RESTARTING) {
-    return (
-      <SlideFade in>
-        <RestartingScreen />
-      </SlideFade>
-    );
+    return <RestartingScreen />;
   }
 
   if (s === SystemStatus.UPDATING) {
-    return (
-      <SlideFade in>
-        <UpdatingScreen />
-      </SlideFade>
-    );
+    return <UpdatingScreen />;
   }
 
   return <>{children}</>;
