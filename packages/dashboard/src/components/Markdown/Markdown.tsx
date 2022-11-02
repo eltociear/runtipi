@@ -18,7 +18,7 @@ const Markdown: React.FC<{ children: string; className: string }> = ({ children,
             <img {...props} className="w-full lg:w-2/3" />
           </div>
         ),
-        p: (props) => <p {...props} className="mb-4 text-center md:text-left" />,
+        p: (props) => <p {...props} className="mb-4 text-left md:text-left" />,
         a: (props) => <a target="_blank" rel="noreferrer" {...props} className="text-blue-500" href={props.href} />,
         div: (props) => <div {...props} className="mb-4" />,
       }}

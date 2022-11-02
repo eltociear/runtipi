@@ -1,19 +1,19 @@
 import { useApolloClient } from '@apollo/client';
-import { useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useRegisterMutation } from '../../../generated/graphql';
+import { useToastStore } from '../../../state/toastStore';
 import AuthFormLayout from '../components/AuthFormLayout';
 import RegisterForm from '../components/RegisterForm';
 
 const Onboarding: React.FC = () => {
   const client = useApolloClient();
-  const toast = useToast();
+  const { addToast } = useToastStore();
   const [register] = useRegisterMutation({ refetchQueries: ['Me'] });
   const [loading, setLoading] = useState(false);
 
   const handleError = (error: unknown) => {
     if (error instanceof Error) {
-      toast({
+      addToast({
         title: 'Error',
         description: error.message,
         status: 'error',

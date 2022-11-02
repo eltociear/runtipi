@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Input } from '@chakra-ui/react';
 import clsx from 'clsx';
 
 interface IProps {

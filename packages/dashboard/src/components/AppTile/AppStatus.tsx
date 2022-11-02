@@ -1,32 +1,20 @@
+import clsx from 'clsx';
 import React from 'react';
-import { FiPauseCircle, FiPlayCircle } from 'react-icons/fi';
-import { RiLoader4Line } from 'react-icons/ri';
 import { AppStatusEnum } from '../../generated/graphql';
 
-const AppStatus: React.FC<{ status: AppStatusEnum }> = ({ status }) => {
-  if (status === AppStatusEnum.Running) {
-    return (
-      <>
-        <FiPlayCircle className="text-green-500 mr-1" size={20} />
-        <span className="text-gray-400 text-sm">Running</span>
-      </>
-    );
-  }
+const AppStatus: React.FC<{ status: AppStatusEnum; lite?: boolean }> = ({ status, lite }) => {
+  const formattedStatus = `${status[0]}${status.substring(1, status.length).toLowerCase()}`;
 
-  if (status === AppStatusEnum.Stopped) {
-    return (
-      <>
-        <FiPauseCircle className="text-red-500 mr-1" size={20} />
-        <span className="text-gray-400 text-sm">Stopped</span>
-      </>
-    );
-  }
+  const classes = clsx('status-dot status-gray', {
+    'status-dot-animated status-green': status === AppStatusEnum.Running,
+    'status-red': status === AppStatusEnum.Stopped,
+  });
 
   return (
-    <>
-      <RiLoader4Line className="text-gray-500 mr-1" size={20} />
-      <span className="text-gray-400 text-sm">{`${status[0]}${status.substring(1, status.length).toLowerCase()}...`}</span>
-    </>
+    <div data-place="top" data-tip={lite && formattedStatus} className="d-flex align-items-center">
+      <span className={classes}></span>
+      {!lite && <span className="ms-2 mb-1 text-muted fs-6 fw-light">{formattedStatus}</span>}
+    </div>
   );
 };
 

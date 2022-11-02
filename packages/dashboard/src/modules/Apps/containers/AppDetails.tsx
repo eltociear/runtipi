@@ -24,6 +24,7 @@ import {
 } from '../../../generated/graphql';
 import UpdateModal from '../components/UpdateModal';
 import { IFormValues } from '../components/InstallForm';
+import AppStatus from '../../../components/AppTile/AppStatus';
 
 interface IProps {
   app?: Pick<App, 'status' | 'config' | 'version' | 'updateInfo' | 'exposed' | 'domain'>;
@@ -147,72 +148,125 @@ const AppDetails: React.FC<IProps> = ({ app, info }) => {
   const newVersion = [app?.updateInfo?.dockerVersion ? `${app?.updateInfo?.dockerVersion}` : '', `(${app?.updateInfo?.latest})`].join(' ');
 
   return (
-    <SlideFade in className="flex flex-1" offsetY="20px">
-      <div className="flex flex-1 p-4 mt-3 rounded-lg flex-col">
-        <Flex className="flex-col md:flex-row">
-          <AppLogo id={info.id} size={180} className="self-center md:self-auto" alt={info.name} />
-          <div className="flex flex-col justify-between flex-1 ml-0 md:ml-4">
-            <div className="mt-3 items-center self-center flex flex-col md:items-start md:self-start md:mt-0">
-              <h1 className="font-bold text-2xl">{info.name}</h1>
-              {app?.domain && app.exposed && (
-                <a target="_blank" rel="noreferrer" className="text-blue-500 text-md" href={`https://${app.domain}`}>
-                  <Flex className="items-center">
-                    {app.domain}
-                    <FiExternalLink className="ml-1" />
-                  </Flex>
-                </a>
-              )}
-
-              <h2 className="text-center md:text-left">{info.short_desc}</h2>
-              <h3 className="text-center md:text-left text-sm">
-                version: <b>{version}</b>
-              </h3>
-              {info.source && (
-                <a target="_blank" rel="noreferrer" className="text-blue-500 text-xs" href={info.source}>
-                  <Flex className="mt-2 items-center">
-                    Source
-                    <FiExternalLink className="ml-1" />
-                  </Flex>
-                </a>
-              )}
-              <p className="text-xs text-gray-600">By {info.author}</p>
-            </div>
-
-            <div className="flex flex-1">
-              <AppActions
-                updateAvailable={updateAvailable}
-                onUpdate={updateDisclosure.onOpen}
-                onUpdateSettings={updateSettingsDisclosure.onOpen}
-                onOpen={handleOpen}
-                onStart={handleStartSubmit}
-                onStop={stopDisclosure.onOpen}
-                onCancel={stopDisclosure.onOpen}
-                onUninstall={uninstallDisclosure.onOpen}
-                onInstall={installDisclosure.onOpen}
-                app={info}
-                status={app?.status}
-              />
-            </div>
+    <div className="card">
+      <div className="card-header d-flex flex-column flex-md-row">
+        <AppLogo id={info.id} size={100} alt={info.name} />
+        <div className="w-100 d-flex flex-column ms-md-3 align-items-center align-items-md-start">
+          <div className="">
+            <span className="mt-1 me-1">Version: </span>
+            <span className="badge bg-gray mt-2">{info?.version}</span>
           </div>
-        </Flex>
-        <Divider className="mt-5" />
-        <Markdown className="mt-3">{info.description}</Markdown>
-        <InstallModal onSubmit={handleInstallSubmit} isOpen={installDisclosure.isOpen} onClose={installDisclosure.onClose} app={info} />
-        <UninstallModal onConfirm={handleUnistallSubmit} isOpen={uninstallDisclosure.isOpen} onClose={uninstallDisclosure.onClose} app={info} />
-        <StopModal onConfirm={handleStopSubmit} isOpen={stopDisclosure.isOpen} onClose={stopDisclosure.onClose} app={info} />
-        <UpdateSettingsModal
-          onSubmit={handleUpdateSettingsSubmit}
-          isOpen={updateSettingsDisclosure.isOpen}
-          onClose={updateSettingsDisclosure.onClose}
-          app={info}
-          config={app?.config}
-          exposed={app?.exposed}
-          domain={app?.domain || ''}
-        />
-        <UpdateModal onConfirm={handleUpdateSubmit} isOpen={updateDisclosure.isOpen} onClose={updateDisclosure.onClose} app={info} newVersion={newVersion} />
+          <span>{info.short_desc}</span>
+          {app && app?.status !== AppStatusEnum.Missing && <AppStatus status={app.status} />}
+          <AppActions
+            updateAvailable={updateAvailable}
+            onUpdate={updateDisclosure.onOpen}
+            onUpdateSettings={updateSettingsDisclosure.onOpen}
+            onOpen={handleOpen}
+            onStart={handleStartSubmit}
+            onStop={stopDisclosure.onOpen}
+            onCancel={stopDisclosure.onOpen}
+            onUninstall={uninstallDisclosure.onOpen}
+            onInstall={installDisclosure.onOpen}
+            app={info}
+            status={app?.status}
+          />
+        </div>
       </div>
-    </SlideFade>
+      <div className="card">
+        <div style={{ marginTop: -1, marginBottom: -3 }} className="card-header">
+          <ul className="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+            <li className="nav-item">
+              <a className="nav-link active" href="#tabs-description" data-bs-toggle="tab" role="tab" aria-selected="true">
+                Description
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#tabs-links" data-bs-toggle="tab" role="tab" aria-selected="true">
+                Links
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div className="card-body">
+          <div className="tab-content">
+            <div className="tab-pane active" id="tabs-description" role="tabpanel">
+              <Markdown className="mt-3">{info.description}</Markdown>
+            </div>
+            <div className="tab-pane" id="tabs-links" role="tabpanel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
+
+  // return (
+  //   <SlideFade in className="flex flex-1" offsetY="20px">
+  //     <div className="flex flex-1 p-4 mt-3 rounded-lg flex-col">
+  //       <Flex className="flex-col md:flex-row">
+  //         <AppLogo id={info.id} size={180} className="self-center md:self-auto" alt={info.name} />
+  //         <div className="flex flex-col justify-between flex-1 ml-0 md:ml-4">
+  //           <div className="mt-3 items-center self-center flex flex-col md:items-start md:self-start md:mt-0">
+  //             <h1 className="font-bold text-2xl">{info.name}</h1>
+  //             {app?.domain && app.exposed && (
+  //               <a target="_blank" rel="noreferrer" className="text-blue-500 text-md" href={`https://${app.domain}`}>
+  //                 <Flex className="items-center">
+  //                   {app.domain}
+  //                   <FiExternalLink className="ml-1" />
+  //                 </Flex>
+  //               </a>
+  //             )}
+
+  //             <h2 className="text-center md:text-left">{info.short_desc}</h2>
+  //             <h3 className="text-center md:text-left text-sm">
+  //               version: <b>{version}</b>
+  //             </h3>
+  //             {info.source && (
+  //               <a target="_blank" rel="noreferrer" className="text-blue-500 text-xs" href={info.source}>
+  //                 <Flex className="mt-2 items-center">
+  //                   Source
+  //                   <FiExternalLink className="ml-1" />
+  //                 </Flex>
+  //               </a>
+  //             )}
+  //             <p className="text-xs text-gray-600">By {info.author}</p>
+  //           </div>
+
+  //           <div className="flex flex-1">
+  //             <AppActions
+  //               updateAvailable={updateAvailable}
+  //               onUpdate={updateDisclosure.onOpen}
+  //               onUpdateSettings={updateSettingsDisclosure.onOpen}
+  //               onOpen={handleOpen}
+  //               onStart={handleStartSubmit}
+  //               onStop={stopDisclosure.onOpen}
+  //               onCancel={stopDisclosure.onOpen}
+  //               onUninstall={uninstallDisclosure.onOpen}
+  //               onInstall={installDisclosure.onOpen}
+  //               app={info}
+  //               status={app?.status}
+  //             />
+  //           </div>
+  //         </div>
+  //       </Flex>
+  //       <Divider className="mt-5" />
+  //       <Markdown className="mt-3">{info.description}</Markdown>
+  //       <InstallModal onSubmit={handleInstallSubmit} isOpen={installDisclosure.isOpen} onClose={installDisclosure.onClose} app={info} />
+  //       <UninstallModal onConfirm={handleUnistallSubmit} isOpen={uninstallDisclosure.isOpen} onClose={uninstallDisclosure.onClose} app={info} />
+  //       <StopModal onConfirm={handleStopSubmit} isOpen={stopDisclosure.isOpen} onClose={stopDisclosure.onClose} app={info} />
+  //       <UpdateSettingsModal
+  //         onSubmit={handleUpdateSettingsSubmit}
+  //         isOpen={updateSettingsDisclosure.isOpen}
+  //         onClose={updateSettingsDisclosure.onClose}
+  //         app={info}
+  //         config={app?.config}
+  //         exposed={app?.exposed}
+  //         domain={app?.domain || ''}
+  //       />
+  //       <UpdateModal onConfirm={handleUpdateSubmit} isOpen={updateDisclosure.isOpen} onClose={updateDisclosure.onClose} app={info} newVersion={newVersion} />
+  //     </div>
+  //   </SlideFade>
+  // );
 };
 
 export default AppDetails;

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
 import { getUrl } from '../../core/helpers/url-helpers';
-import { IconBrandGithub, IconHeart, IconMoon, IconSun } from '@tabler/icons';
+import { IconBrandGithub, IconHeart, IconLogout, IconMoon, IconSun } from '@tabler/icons';
 import { useUIStore } from '../../state/uiStore';
 import NavBar from './NavBar';
 
@@ -36,25 +36,14 @@ const Header: React.FC<IProps> = () => {
             </div>
           </div>
           <div className="d-flex">
-            <a
-              onClick={() => setDarkMode(true)}
-              className="nav-link px-0 hide-theme-dark cursor-pointer"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              aria-label="Enable dark mode"
-              data-bs-original-title="Enable dark mode"
-            >
+            <a onClick={() => setDarkMode(true)} className="nav-link px-0 hide-theme-dark cursor-pointer" data-tip="Dark mode">
               <IconMoon size={24} />
             </a>
-            <a
-              onClick={() => setDarkMode(false)}
-              className="nav-link px-0 hide-theme-light cursor-pointer"
-              data-bs-toggle="tooltip"
-              data-bs-placement="bottom"
-              aria-label="Enable light mode"
-              data-bs-original-title="Enable light mode"
-            >
+            <a onClick={() => setDarkMode(false)} className="nav-link px-0 hide-theme-light cursor-pointer" data-tip="Light mode">
               <IconSun size={24} />
+            </a>
+            <a className="nav-link px-0 cursor-pointer" data-tip="Log out">
+              <IconLogout size={24} />
             </a>
           </div>
         </div>
