@@ -149,6 +149,7 @@ const AppDetails: React.FC<IProps> = ({ app, info }) => {
 
   return (
     <div className="card">
+      <InstallModal onSubmit={handleInstallSubmit} isOpen={installDisclosure.isOpen} onClose={installDisclosure.onClose} app={info} />
       <div className="card-header d-flex flex-column flex-md-row">
         <AppLogo id={info.id} size={100} alt={info.name} />
         <div className="w-100 d-flex flex-column ms-md-3 align-items-center align-items-md-start">

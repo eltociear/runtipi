@@ -1,9 +1,10 @@
-import { Button, Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@chakra-ui/react';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { FiExternalLink, FiPause, FiPlay, FiSettings, FiTrash2 } from 'react-icons/fi';
 import { MdSystemUpdateAlt } from 'react-icons/md';
 import { TiCancel } from 'react-icons/ti';
+import Button from '../../../components/Form/Button';
 import { AppInfo, AppStatusEnum } from '../../../generated/graphql';
 
 interface IProps {
@@ -33,7 +34,7 @@ const ActionButton: React.FC<BtnProps> = (props) => {
   const { Icon, onClick, title, loading, width = 150, color = 'gray' } = props;
 
   return (
-    <Button isLoading={loading} onClick={onClick} width={width || undefined} colorScheme={color} className="mt-3 mr-2">
+    <Button loading={loading} onClick={onClick} width={width || undefined} className="mt-3 mr-2">
       {title}
       {Icon && <Icon className="ml-1" />}
     </Button>
